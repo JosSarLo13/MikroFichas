@@ -12,6 +12,7 @@
     "dev:api": "npm run dev --workspace=@mikromanager/api",
     "dev:web": "npm run dev --workspace=@mikromanager/web",
     "build": "npm run build --workspaces --if-present",
+    "start": "node apps/api/dist/server.js",
     "typecheck": "npm run typecheck --workspaces --if-present"
   },
   "keywords": [
