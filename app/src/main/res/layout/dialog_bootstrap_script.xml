@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_background"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Configuración MikroTik"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnCloseBootstrap"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Cerrar"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="@color/text_secondary" />
+    </LinearLayout>
+
+    <!-- Card 0: Auto-Configurar en 1 Clic Sin Terminal -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:cardBackgroundColor="@color/card_dark"
+        app:cardCornerRadius="12dp"
+        app:strokeColor="@color/cyan_accent"
+        app:strokeWidth="1.5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⚡ Auto-Configurar en 1 Clic (Sin Terminal)"
+                android:textColor="@color/cyan_light"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:lineSpacingMultiplier="1.2"
+                android:text="¿Te da pereza copiar comandos? Toca aquí para configurar reloj anti-apagones, servidor Hotspot, perfiles (1 ficha por celular) y portal cautivo automáticamente:"
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAutoProvisionInDialog"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/emerald_accent"
+                android:text="⚡ Auto-Configurar MikroTik Ahora"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Card 1: Comando Rápido para MikroTik Nuevo (Desbloqueo de API y Firewall) -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:cardBackgroundColor="@color/card_dark"
+        app:cardCornerRadius="12dp"
+        app:strokeColor="@color/emerald_light"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿MikroTik Nuevo o Conexión Rechazada?"
+                android:textColor="@color/emerald_light"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:lineSpacingMultiplier="1.2"
+                android:text="Los MikroTiks de fábrica bloquean el puerto API por Firewall. Pega este único comando en Winbox Terminal para desbloquearlo al instante:"
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCopyQuickUnlock"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/surface_dark"
+                android:text="Copiar Desbloqueo API (1 Línea)"
+                android:textAllCaps="false"
+                android:textColor="@color/emerald_light"
+                android:textSize="12sp"
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_code"
+                app:iconGravity="textStart"
+                app:iconPadding="6dp"
+                app:iconSize="16dp"
+                app:iconTint="@color/emerald_light" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Botones de Fragmentos Específicos -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCopyNtp"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/surface_dark"
+            android:text="Anti-Apagones (NTP)"
+            android:textAllCaps="false"
+            android:textColor="@color/cyan_accent"
+            android:textSize="11sp"
+            app:cornerRadius="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCopyHotspot"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/surface_dark"
+            android:text="Subred y Perfiles"
+            android:textAllCaps="false"
+            android:textColor="@color/amber_primary"
+            android:textSize="11sp"
+            app:cornerRadius="8dp" />
+    </LinearLayout>
+
+    <!-- Card 2: Script Completo Desde Cero con Selección Libre -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Script Completo (Selecciona libremente cualquier texto con tu dedo):"
+        android:textColor="@color/text_primary"
+        android:textSize="11sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginTop="6dp"
+        android:background="@color/surface_dark"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/tvScriptContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:text="# Cargando script RouterOS..."
+            android:textColor="@color/emerald_light"
+            android:textIsSelectable="true"
+            android:textSize="11sp" />
+    </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCopyScript"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/cyan_accent"
+        android:text="Copiar Script Completo"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        app:icon="@drawable/ic_code"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
+        app:iconTint="@color/white" />
+
+</LinearLayout>

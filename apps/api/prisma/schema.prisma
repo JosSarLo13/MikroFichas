@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  email        String   @unique
+  passwordHash String
+  role         String   @default("OPERADOR") // SUPERADMIN, ADMIN, OPERADOR, CONSULTA
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  sales        Sale[]
+  auditLogs    AuditLog[]
+
+  @@map("users")
+}
+
+model Router {
+  id                String   @id @default(uuid())
+  name              String
+  host              String
+  apiPort           Int      @default(8728)
+  useSsl            Boolean  @default(false)
+  username          String
+  encryptedPassword String
+  iv                String
+  authTag           String
+  rosVersion        String?
+  identity          String?
+  status            String   @default("UNCHECKED") // ONLINE, OFFLINE, ERROR, UNCHECKED
+  lastSeenAt        DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  plans             Plan[]
+  tickets           Ticket[]
+  sales             Sale[]
+
+  @@map("routers")
+}
+
+model Plan {
+  id                  String   @id @default(uuid())
+  name                String
+  price               Float
+  durationSeconds     Int      @default(7200) // 2 horas por defecto
+  validityType        String   @default("UPTIME_ACCUMULATED") // UPTIME_ACCUMULATED, WALL_CLOCK_CALENDAR
+  downloadSpeedKbps   Int      @default(5120) // 5 Mbps
+  uploadSpeedKbps     Int      @default(2048) // 2 Mbps
+  dataLimitBytes      BigInt   @default(0) // 0 = ilimitado
+  sharedUsers         Int      @default(1)
+  hotspotProfileName  String   @default("default")
+  routerId            String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  router              Router   @relation(fields: [routerId], references: [id], onDelete: Cascade)
+  tickets             Ticket[]
+
+  @@map("plans")
+}
+
+model Ticket {
+  id          String    @id @default(uuid())
+  routerId    String
+  planId      String
+  username    String    // PIN o usuario Hotspot
+  password    String    // Contraseña Hotspot
+  rosUserId   String?   // .id en MikroTik (*1A)
+  status      String    @default("AVAILABLE") // AVAILABLE, RESERVED, SOLD, ACTIVE, EXPIRED, DISABLED
+  activatedAt DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  router      Router    @relation(fields: [routerId], references: [id], onDelete: Cascade)
+  plan        Plan      @relation(fields: [planId], references: [id], onDelete: Cascade)
+  saleItem    SaleItem?
+
+  @@unique([routerId, username])
+  @@index([status])
+  @@map("tickets")
+}
+
+model Sale {
+  id            String     @id @default(uuid())
+  userId        String
+  routerId      String
+  totalAmount   Float
+  paymentMethod String     @default("CASH") // CASH, TRANSFER, CARD, OTHER
+  notes         String?
+  createdAt     DateTime   @default(now())
+  user          User       @relation(fields: [userId], references: [id])
+  router        Router     @relation(fields: [routerId], references: [id])
+  items         SaleItem[]
+
+  @@index([userId, createdAt])
+  @@map("sales")
+}
+
+model SaleItem {
+  id        String   @id @default(uuid())
+  saleId    String
+  ticketId  String   @unique
+  unitPrice Float
+  sale      Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+
+  @@map("sale_items")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  userId      String?
+  action      String   // LOGIN, LOGOUT, GENERATE_TICKETS, PROCESS_SALE, KICK_USER
+  resource    String
+  resourceId  String?
+  ipAddress   String?
+  detailsJson String?
+  createdAt   DateTime @default(now())
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}

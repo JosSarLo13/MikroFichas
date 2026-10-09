@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="@color/card_dark"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <!-- Top Identity & Model -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvDeviceIdentity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MikroTik"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDeviceDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RouterBOARD (v7.15)"
+                android:textColor="@color/text_secondary"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvDeviceApiStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#2010B981"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="2dp"
+            android:text="API 8728 OK"
+            android:textColor="#10B981"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- IP & MAC Addresses -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvDeviceIp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="monospace"
+            android:text="IP: 192.168.88.1"
+            android:textColor="@color/cyan_accent"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/tvDeviceMac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:text="MAC: CC:2D:E0:1A:2B:3C"
+            android:textColor="@color/text_secondary"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:id="@+id/layoutDeviceActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvDeviceRegisteredBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#2006B6D4"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:text="✓ Ya Registrado"
+            android:textColor="@color/cyan_accent"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDeviceConnectIp"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:backgroundTint="@color/cyan_accent"
+            android:paddingHorizontal="10dp"
+            android:text="Conectar por IP"
+            android:textAllCaps="false"
+            android:textColor="@color/surface_dark"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:cornerRadius="6dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDeviceConnectMac"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginStart="6dp"
+            android:backgroundTint="@color/surface_dark"
+            android:paddingHorizontal="10dp"
+            android:text="Por MAC"
+            android:textAllCaps="false"
+            android:textColor="@color/text_primary"
+            android:textSize="11sp"
+            app:cornerRadius="6dp" />
+    </LinearLayout>
+</LinearLayout>

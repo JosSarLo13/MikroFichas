@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_background"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Conexión Remota ZeroTier"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btnCloseGuide"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Cerrar"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="@color/text_secondary" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Status Banner -->
+            <TextView
+                android:id="@+id/tvRemoteStatusMsg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/surface_dark"
+                android:padding="10dp"
+                android:textColor="@color/cyan_light"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <!-- Paso 1: Network ID -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="1. Ingresa tu Network ID de ZeroTier"
+                android:textColor="@color/cyan_light"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etZtNetworkId"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="6dp"
+                android:background="@color/surface_dark"
+                android:fontFamily="monospace"
+                android:hint="Ej. b9a18a606f03ddb5"
+                android:paddingHorizontal="12dp"
+                android:text="b9a18a606f03ddb5"
+                android:textColor="@color/cyan_light"
+                android:textColorHint="@color/text_muted"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnApplyZeroTier"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/indigo_accent"
+                    android:text="⚡ Auto-Configurar"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:cornerRadius="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCopyZeroTierCmd"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/card_dark"
+                    android:text="📋 Copiar Comando"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_primary"
+                    android:textSize="12sp"
+                    app:cornerRadius="8dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvZtCommand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/surface_dark"
+                android:fontFamily="monospace"
+                android:padding="8dp"
+                android:text="/zerotier interface add network=b9a18a606f03ddb5 name=zt1&#10;/zerotier enable zt1"
+                android:textColor="@color/emerald_light"
+                android:textSize="11sp" />
+
+            <!-- Paso 2: Autorización -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="2. Autoriza en my.zerotier.com"
+                android:textColor="@color/cyan_light"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:lineSpacingMultiplier="1.2"
+                android:text="En tu página web de ZeroTier, ve a 'Member Devices', marca la casilla 'Auth' de tu MikroTik y copia la IP asignada (ejemplo: 10.147.20.10)."
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp" />
+
+            <!-- Paso 3: Conectar Remotamente -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="3. Conectar la App Remotamente a esa IP"
+                android:textColor="@color/emerald_light"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etZtRemoteIp"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="6dp"
+                android:background="@color/surface_dark"
+                android:fontFamily="monospace"
+                android:hint="Ej. 10.147.20.10"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_muted"
+                android:textSize="13sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnConnectRemoteIp"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/emerald_accent"
+                android:text="Guardar IP y Conectar Remotamente"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_cloud"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@color/white" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

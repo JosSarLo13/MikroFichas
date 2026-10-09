@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="refresh" content="30">
+    <title>Conectado • Fichas Sarmientos</title>
+    <style>
+        :root {
+            --bg-color: #090D16;
+            --surface-glass: rgba(17, 24, 39, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #06B6D4;
+            --accent: #10B981;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.15) 0%, transparent 60%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 390px;
+            background: var(--surface-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 28px 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        .success-icon-wrap {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #34D399;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .stat-card {
+            background: #0B111E;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 12px 14px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .stat-val {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-primary);
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        .stat-val.accent {
+            color: #34D399;
+        }
+
+        .stat-val.cyan {
+            color: #38BDF8;
+        }
+
+        .btn-logout {
+            width: 100%;
+            height: 46px;
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #F87171;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-continue {
+            width: 100%;
+            height: 48px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: #090D16;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            margin-top: 14px;
+        }
+
+        .footer {
+            margin-top: 18px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon-wrap">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+        </div>
+
+        <h1>¡Estás Conectado!</h1>
+        <p class="subtitle">Fichas Sarmientos • Wi-Fi Activo</p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">PIN / Usuario</div>
+                <div class="stat-val cyan">$(username)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Tiempo Restante</div>
+                <div class="stat-val accent">$(if session-time-left) $(session-time-left) $(else) Ilimitado $(endif)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Tiempo Conectado</div>
+                <div class="stat-val">$(uptime)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Datos Consumidos</div>
+                <div class="stat-val">$(bytes-total-nice)</div>
+            </div>
+        </div>
+
+        <a href="https://www.google.com" class="btn-continue" target="_blank">
+            CONTINUAR NAVEGANDO
+        </a>
+
+        <form action="$(link-logout)" name="logout" onSubmit="return openLogout()">
+            <button type="submit" class="btn-logout">
+                Pausar / Desconectar Sesión
+            </button>
+        </form>
+
+        <div class="footer">
+            IP: $(ip) • MAC: $(mac)<br>
+            Fichas Sarmientos © 2026
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,382 @@
+================================================================================
+          DOCUMENTO MAESTRO DE ARQUITECTURA E INGENIERIA DE SOFTWARE
+                                MIKROMANAGER
+     Sistema Profesional de Gestion Hotspot, Venta de Fichas WiFi y Control
+                           MikroTik RouterOS v6 / v7
+================================================================================
+
+FICHA TECNICA DEL PROYECTO
+--------------------------------------------------------------------------------
+Proyecto:           MikroManager (Hotspot Controller & WISP Ticketing Platform)
+Autoria:            Senior Software Architect & MikroTik Systems Specialist
+Compatibilidad:     MikroTik RouterOS v6.43+ hasta RouterOS v7.x (API / API-SSL)
+Topologia:          Arquitectura Hexagonal Desacoplada (Event-Driven)
+Stack Principal:    Node.js 22 LTS, Fastify, Prisma ORM, React 19, Tailwind CSS v4
+Base de Datos:      PostgreSQL 16 (Produccion) / SQLite (Modo Edge/Local)
+Criptografia:       AES-256-GCM para credenciales RouterOS, Bcrypt 12, JWT HttpOnly
+Impresion:          Driver ESC/POS directo (58mm/80mm) y planillas vectoriales A4/A5
+Estado:             Fase 0: Aprobacion de Arquitectura e Ingenieria Base
+Fecha:              Octubre 2026
+--------------------------------------------------------------------------------
+
+================================================================================
+1. DIRECTRIZ FUNDAMENTAL: CERO SIMULACIONES
+================================================================================
+MikroManager no es un prototipo visual ni una interfaz ficticia. Toda interaccion
+con los routers MikroTik se realiza a traves de su protocolo binario real de sockets
+(puerto 8728 en texto plano para redes locales y puerto 8729 con cifrado TLS/SSL).
+
+Reglas de Oro del Sistema:
+  1. No inventar APIs ni comandos de RouterOS. Cada funcion mapea a un comando real.
+  2. Aislamiento de fallos: La caida, lentitud o corte de un router remoto nunca
+     bloquea ni congela el servidor ni perjudica las ventas de otros nodos.
+  3. Toda credencial de RouterOS se cifra en reposo con AES-256-GCM y nunca se
+     envia al frontend en texto plano.
+  4. Si una funcion de RouterOS requiere soporte no nativo (ej. caducidad por reloj
+     de pared en lugar de uptime acumulado), se implementa mediante mecanismos
+     oficiales documentados (scripts de login y monitoreo de sincronizacion).
+
+================================================================================
+2. STACK TECNOLOGICO Y JUSTIFICACIONES
+================================================================================
+
+  A. BACKEND API: Node.js 22 LTS + Fastify v5 + TypeScript 5.x
+     - Manejo de I/O asincrono no bloqueante de alta velocidad para sockets TCP.
+     - Serializacion JSON y validacion de esquemas Zod ultrarrapida.
+     - Soporte nativo para WebSockets (telemetria y eventos en tiempo real).
+     - Consumo de memoria RAM significativamente menor que frameworks pesados.
+
+  B. BASE DE DATOS Y ORM: PostgreSQL 16 + Prisma ORM
+     - Soporte transaccional ACID estricto para compras, ventas y arqueo de caja.
+     - Opcion de alternar a SQLite para despliegues embebidos en mini-PCs locales.
+     - Migraciones declarativas y tipado fuertemente tipado de extremo a extremo.
+
+  C. DRIVER MIKROTIK: Driver de Socket Nativo Propio (net / tls)
+     - Implementacion directa del protocolo de palabras y oraciones (sentences).
+     - Decodificador de longitud de bytes (1 a 4 bytes, bitmasks 0x80 a 0xE0).
+     - Multiplexacion asincrona concurrente mediante el atributo '.tag'.
+     - Connection Pooling y patron Circuit Breaker por router.
+
+  D. FRONTEND: React 19 + Vite 6 + Tailwind CSS v4 + Radix UI
+     - Arquitectura modular basada en caracteristicas (features).
+     - Interfaz moderna tipo SaaS (estilo Linear/Cloudflare), limpia y profesional.
+     - Dark Mode y Light Mode nativo con transiciones sutiles.
+     - Estado global con Zustand y cache de consultas con TanStack Query v5.
+
+  E. MOTOR DE IMPRESION Y GENERACION QR:
+     - Driver ESC/POS binario para impresion termica directa via Web Serial/USB.
+     - Generador de codigos QR compactos y limpios (solo datos indispensables).
+     - Generador de planillas A4/A5 con cuadricula de corte punteada para guillotina.
+
+================================================================================
+3. ARQUITECTURA HEXAGONAL DEL SISTEMA
+================================================================================
+
+El software se estructura en cuatro capas concentricas desacopladas:
+
+  [1] CAPA DE DOMINIO (Domain):
+      Entidades puras de negocio (Router, Ticket, Plan, Sale, User, Session).
+      No tiene dependencias de bases de datos, frameworks ni librerias externas.
+      Define los puertos (interfaces) para repositorios y drivers de red.
+
+  [2] CAPA DE APLICACION (Application - Casos de Uso):
+      Orquesta la logica del negocio:
+      - GenerateTicketBatchUseCase: generacion masiva con algoritmo anti-colision.
+      - ProcessSaleUseCase: registro de venta, comprobante y cambio de estado.
+      - DisconnectUserUseCase: desconexion forzada de capa 2/3 en RouterOS.
+      - SyncRouterTelemetryUseCase: lectura de CPU, RAM, uptime y trafico.
+      - TestRouterConnectionUseCase: validacion de socket y autenticacion.
+
+  [3] CAPA DE INFRAESTRUCTURA (Infrastructure):
+      Implementa los adaptadores que conectan con el mundo exterior:
+      - MikroTikApiDriver: Socket Pool TCP/TLS, SentenceParser, Circuit Breaker.
+      - PrismaRepositories: Persistencia en PostgreSQL/SQLite.
+      - CryptoService: Cifrado y descifrado AES-256-GCM.
+      - EscPosPrinterService: Emision de bytes directos a impresoras termicas.
+
+  [4] CAPA DE PRESENTACION (Presentation):
+      - Controladores REST en Fastify (/api/v1/auth, /api/v1/routers, etc.).
+      - WebSockets Gateway para streaming de metricas en vivo (/ws/telemetry).
+      - Middlewares de autorizacion RBAC y rate limiting.
+      - SPA en React 19 con interfaz responsive.
+
+================================================================================
+4. ESTRUCTURA DE CARPETAS DEL MONOREPO
+================================================================================
+
+MikroManager/
+|-- apps/
+|   |-- api/                           # Backend Fastify + TypeScript
+|   |   |-- prisma/
+|   |   |   |-- schema.prisma          # Esquema relacional
+|   |   |   \-- migrations/            # Historial de migraciones SQL
+|   |   |-- src/
+|   |   |   |-- domain/                # Entidades puras y contratos
+|   |   |   |-- application/           # Casos de uso (Use Cases)
+|   |   |   |-- infrastructure/        # Driver MikroTik, Prisma, Crypto
+|   |   |   |-- presentation/          # Controladores REST, Rutas, WS
+|   |   |   |-- config/                # Variables de entorno y constantes
+|   |   |   \-- server.ts              # Inicializacion y plugins Fastify
+|   |   |-- package.json
+|   |   \-- tsconfig.json
+|   |
+|   \-- web/                           # Frontend React 19 + Vite + Tailwind v4
+|       |-- src/
+|       |   |-- components/ui/         # Componentes base accesibles (Radix)
+|       |   |-- features/              # Modulos de negocio completos
+|       |   |   |-- auth/              # Inicio de sesion y roles
+|       |   |   |-- dashboard/         # Metricas, graficas y salud de routers
+|       |   |   |-- routers/           # CRUD, telemetria y wizard de conexion
+|       |   |   |-- plans/             # Tarifas, perfiles de ancho de banda
+|       |   |   |-- tickets/           # Generador masivo, lista y diseno
+|       |   |   |-- pos/               # Punto de venta rapido para cajeros
+|       |   |   |-- hotspot/           # Clientes conectados y kick en vivo
+|       |   |   |-- captive-portal/    # Editor visual y exportador de plantillas
+|       |   |   |-- reports/           # Reportes de ventas, PDF y CSV
+|       |   |   \-- audit/             # Registro de actividades y auditoria
+|       |   |-- lib/                   # Clientes API, helpers y formateadores
+|       |   |-- stores/                # Zustand (Auth, Router Activo, Carrito)
+|       |   \-- App.tsx
+|       |-- package.json
+|       \-- vite.config.ts
+|
+|-- packages/
+|   \-- shared-types/                  # DTOs, Enums y Contratos comunes
+|
+|-- docs/                              # Documentacion tecnica y de despliegue
+|-- docker-compose.yml                 # Despliegue listo para produccion
+\-- README.md
+
+================================================================================
+5. MODELO DE BASE DE DATOS RELACIONAL (ENTIDADES Y RELACIONES)
+================================================================================
+
+  A. users
+     - id: UUID (PK)
+     - username: VARCHAR(50) (UNIQUE)
+     - email: VARCHAR(100) (UNIQUE)
+     - password_hash: VARCHAR(255) (Bcrypt 12 rondas)
+     - role: ENUM ('SUPERADMIN', 'ADMIN', 'OPERADOR', 'CONSULTA')
+     - is_active: BOOLEAN (DEFAULT TRUE)
+     - created_at, updated_at: TIMESTAMP
+
+  B. routers
+     - id: UUID (PK)
+     - name: VARCHAR(100)
+     - host: VARCHAR(255) (IP o dominio DNS)
+     - api_port: INT (DEFAULT 8728, CHECK 1-65535)
+     - use_ssl: BOOLEAN (DEFAULT FALSE)
+     - username: VARCHAR(100)
+     - encrypted_password: TEXT (Cifrado AES-256-GCM)
+     - iv: VARCHAR(32) (Vector de inicializacion de 12 bytes en hex)
+     - auth_tag: VARCHAR(32) (Tag de autenticacion de 16 bytes en hex)
+     - ros_version: VARCHAR(50)
+     - identity: VARCHAR(100)
+     - status: ENUM ('ONLINE', 'OFFLINE', 'ERROR', 'UNCHECKED')
+     - last_seen_at: TIMESTAMP
+
+  C. hotspot_profiles
+     - id: UUID (PK)
+     - router_id: UUID (FK -> routers.id ON DELETE CASCADE)
+     - name: VARCHAR(100)
+     - rate_limit: VARCHAR(50) (Ej. '5M/2M' o con burst)
+     - shared_users: INT (DEFAULT 1)
+     - session_timeout: INT (segundos)
+     - keepalive_timeout: INT (segundos)
+
+  D. plans
+     - id: UUID (PK)
+     - name: VARCHAR(100) (Ej. '2 Horas', '1 Dia', '5 GB')
+     - price: DECIMAL(10, 2)
+     - duration_seconds: INT (Tiempo asignado)
+     - validity_type: ENUM ('UPTIME_ACCUMULATED', 'WALL_CLOCK_CALENDAR')
+     - download_speed_kbps: INT
+     - upload_speed_kbps: INT
+     - data_limit_bytes: BIGINT (Cuota de transferencia en bytes, 0 = ilimitado)
+     - shared_users: INT (DEFAULT 1)
+     - router_id: UUID (FK -> routers.id)
+     - hotspot_profile_name: VARCHAR(100)
+
+  E. ticket_batches
+     - id: UUID (PK)
+     - router_id: UUID (FK -> routers.id)
+     - plan_id: UUID (FK -> plans.id)
+     - user_id: UUID (FK -> users.id, creador del lote)
+     - prefix: VARCHAR(10) (Prefijo alfanumerico)
+     - quantity: INT (1 a 500)
+     - created_at: TIMESTAMP
+
+  F. tickets
+     - id: UUID (PK)
+     - batch_id: UUID (FK -> ticket_batches.id ON DELETE SET NULL)
+     - router_id: UUID (FK -> routers.id ON DELETE CASCADE)
+     - plan_id: UUID (FK -> plans.id)
+     - username: VARCHAR(50) (Credencial / PIN Hotspot)
+     - password: VARCHAR(50)
+     - ros_user_id: VARCHAR(50) (ID interno devuelto por RouterOS, ej. '*2A')
+     - status: ENUM ('AVAILABLE', 'RESERVED', 'SOLD', 'ACTIVE', 'EXPIRED', 'DISABLED')
+     - activated_at: TIMESTAMP (Primer inicio de sesion registrado)
+     - expires_at: TIMESTAMP (Fecha calculada de vencimiento)
+     - created_at: TIMESTAMP
+     * RESTRICCION: UNIQUE(router_id, username)
+     * INDICES: INDEX(status), INDEX(expires_at)
+
+  G. sales & sale_items
+     - sales.id: UUID (PK)
+     - sales.user_id: UUID (FK -> users.id, operador que realizo la venta)
+     - sales.router_id: UUID (FK -> routers.id)
+     - sales.total_amount: DECIMAL(10, 2)
+     - sales.payment_method: ENUM ('CASH', 'TRANSFER', 'CARD', 'OTHER')
+     - sales.notes: TEXT
+     - sales.created_at: TIMESTAMP
+     - sale_items.id: UUID (PK)
+     - sale_items.sale_id: UUID (FK -> sales.id ON DELETE CASCADE)
+     - sale_items.ticket_id: UUID (FK -> tickets.id, UNIQUE)
+     - sale_items.unit_price: DECIMAL(10, 2)
+
+  H. sessions (Historial de Conexiones Reales)
+     - id: UUID (PK)
+     - router_id: UUID (FK -> routers.id)
+     - username: VARCHAR(50)
+     - ip_address: VARCHAR(45)
+     - mac_address: VARCHAR(17)
+     - uptime_seconds: INT
+     - bytes_in: BIGINT
+     - bytes_out: BIGINT
+     - started_at: TIMESTAMP
+     - ended_at: TIMESTAMP
+     * INDICES: INDEX(mac_address), INDEX(started_at)
+
+  I. audit_logs
+     - id: UUID (PK)
+     - user_id: UUID (FK -> users.id)
+     - action: VARCHAR(100) (Ej. 'ROUTER_CREATE', 'TICKET_KICK', 'PLAN_DELETE')
+     - resource: VARCHAR(100)
+     - resource_id: VARCHAR(100)
+     - ip_address: VARCHAR(45)
+     - details_json: JSONB
+     - created_at: TIMESTAMP
+
+================================================================================
+6. PROTOCOLO DE COMUNICACION Y MATRIZ DE COMANDOS ROUTEROS API
+================================================================================
+
+Mecanica del Protocolo:
+  - Protocolo binario estructurado en oraciones (sentences) y palabras (words).
+  - La longitud de cada palabra se codifica en 1 a 4 bytes prefijados:
+      * Longitud < 128 (0x80): 1 byte.
+      * Longitud < 16,384 (0x4000): 2 bytes (bit 0x80 encendido).
+      * Longitud < 2,097,152 (0x200000): 3 bytes (bit 0xC0 encendido).
+      * Longitud < 268,435,456 (0x10000000): 4 bytes (bit 0xE0 encendido).
+  - Cada oracion termina con un byte 0x00.
+  - Para soportar peticiones asincronas paralelas sobre un mismo socket, cada
+    comando se envia con un tag unico '= .tag=ID'. RouterOS responde con dicho
+    tag, permitiendo resolver la promesa correcta en memoria sin cruce de datos.
+
+Matriz de Comandos Reales:
+--------------------------------------------------------------------------------
+Operacion MikroManager  | Comando RouterOS         | Parametros y Respuesta
+--------------------------------------------------------------------------------
+Prueba de Conexion      | /system/identity/print   | Retorna !re con identity.
+Telemetria de Hardware  | /system/resource/print   | Retorna uptime, cpu-load, RAM.
+Crear Perfil Hotspot    | /ip/hotspot/user/profile | =name= =rate-limit=
+                        | /add                     | Captura !trap si duplica.
+Inyectar Ticket/PIN     | /ip/hotspot/user/add     | =name= =password= =profile=
+                        |                          | =limit-uptime= =server=all
+Desactivar Ficha        | /ip/hotspot/user/set     | =.id=*ID =disabled=yes
+Eliminar Ficha          | /ip/hotspot/user/remove  | =.id=*ID
+Consultar Conectados    | /ip/hotspot/active/print | Retorna lista de sesiones en vivo
+Expulsar Usuario (Kick) | /ip/hotspot/active/remove| =.id=*ID_SESION (Corte Capa 2/3)
+Monitorear Trafico      | /interface/monitor-      | =interface=ether1 =once=
+                        | traffic                  | Retorna rx-bits y tx-bits
+--------------------------------------------------------------------------------
+
+================================================================================
+7. ESPECIFICACION DE CRIPTOGRAFIA Y SEGURIDAD
+================================================================================
+
+  A. Cifrado de Credenciales MikroTik (AES-256-GCM):
+     - Las contraseñas de RouterOS jamas se envian al frontend ni se guardan en
+       texto plano en la base de datos.
+     - Clave Maestra de 256 bits (32 bytes) provista via variable de entorno.
+     - Vector de Inicializacion (IV) criptograficamente aleatorio de 12 bytes
+       (96 bits) generado para cada actualizacion.
+     - Tag de autenticacion de 16 bytes (128 bits) que previene cualquier
+       modificacion maliciosa en la base de datos.
+
+  B. Aislamiento de Fallos mediante Circuit Breaker:
+     - Cada router cuenta con una maquina de estados de resiliencia:
+         [CLOSED] (Operativo) -> 3 fallos consecutivos -> [OPEN] (Aislado)
+         [OPEN] -> Espera tiempo de retroceso -> [HALF-OPEN] (Sonda de prueba)
+     - Cuando un router esta caido o apagado, las peticiones fallan en 0 ms con
+       un mensaje claro al usuario, sin congelar el backend ni las cajas de venta.
+
+  C. Control de Acceso Basado en Roles (RBAC):
+     - SUPERADMIN: Control total del sistema, administracion de routers y usuarios.
+     - ADMIN: Administracion general, creacion de planes, perfiles y reportes.
+     - OPERADOR: Punto de venta (POS), impresion de fichas y consulta de sus ventas.
+     - CONSULTA: Solo lectura de metricas, sin permisos de modificacion ni venta.
+
+================================================================================
+8. SISTEMA DE GENERACION DE TICKETS E IMPRESION
+================================================================================
+
+  A. Generador Masivo con Algoritmo Anti-Colision:
+     - Genera PINs alfanumericos o numericos evitando caracteres confusos (0, O, 1, I, l).
+     - Verifica la no existencia previa en la base de datos local y en RouterOS.
+     - Throttled Ingestion: Inyecta los usuarios a MikroTik en bloques de 20
+       con pausas de 50 ms para mantener la CPU del router por debajo del 15%.
+
+  B. Motor de Impresion Termica Directa (ESC/POS):
+     - Emision de secuencias binarias para impresoras de 58mm y 80mm via Web Serial API
+       (USB virtual COM) o impresion nativa del navegador con media queries de impresion.
+     - Comandos estandar: ESC @ (Reset), ESC a 1 (Centrado), GS v 0 (QR/Graficos),
+       GS V 66 0 (Corte de papel).
+
+  C. Planillas de Distribucion A4 / A5:
+     - Cuadricula optimizada de 24 tickets por hoja A4 y 12 por A5.
+     - Lineas de corte punteadas para guillotina con logo, PIN, tiempo y precio.
+
+================================================================================
+9. GUIA OFICIAL DE APROVISIONAMIENTO EN MIKROTIK ROUTEROS
+================================================================================
+
+Ejecutar en la terminal de RouterOS (New Terminal en Winbox):
+
+  # 1. Crear grupo de permisos estrictos (sin acceso a FTP, Winbox ni politicas criticas)
+  /user group add name=mikromanager-group policy=api,read,write,test,!ftp,!reboot,!policy,!password,!winbox,!web
+
+  # 2. Crear usuario especifico para la plataforma
+  /user add name=mikromanager group=mikromanager-group password="CambiarPorClaveSegura2026!#" comment="Usuario MikroManager"
+
+  # 3. Habilitar el servicio API y API-SSL
+  /ip service set api disabled=no port=8728
+  /ip service set api-ssl disabled=no port=8729
+
+  # 4. Proteger la API en el Firewall (Permitir unicamente la IP del servidor)
+  /ip firewall filter add chain=input protocol=tcp dst-port=8728,8729 src-address=IP_DEL_SERVIDOR action=accept comment="MikroManager API"
+  /ip firewall filter add chain=input protocol=tcp dst-port=8728,8729 action=drop comment="Bloquear resto de accesos API"
+
+================================================================================
+10. PLAN DE DESARROLLO POR FASES (ROADMAP)
+================================================================================
+  [Fase 1]  Arquitectura Base del Monorepo y Componentes UI
+  [Fase 2]  Modelado Relacional y Migraciones Prisma
+  [Fase 3]  Autenticacion, Usuarios y RBAC
+  [Fase 4]  Dashboard de Telemetria y KPIs
+  [Fase 5]  Driver MikroTik API Capa 7 (Socket & Circuit Breaker)
+  [Fase 6]  Modulo de Routers (CRUD y Hardware Status)
+  [Fase 7]  Planes y Mapeo de Perfiles Hotspot
+  [Fase 8]  Generador Masivo de Tickets y Algoritmo Anti-Colision
+  [Fase 9]  Modulo de Ventas y Caja Rapida (POS)
+  [Fase 10] Gestion de Operadores y Arqueo de Turnos
+  [Fase 11] Gestion de Hotspot en Vivo (Active Users & Kick)
+  [Fase 12] Editor y Exportador de Portal Cautivo
+  [Fase 13] Reportes Ejecutivos y Exportacion (PDF/CSV)
+  [Fase 14] Motor de Impresion ESC/POS y Planillas A4/A5
+  [Fase 15] Hardening de Seguridad y Auditoria
+  [Fase 16] Suite de Pruebas Automatizadas
+  [Fase 17] Empaquetado Docker y Manual de Puesta a Punto
+================================================================================
+                              FIN DEL DOCUMENTO
+================================================================================

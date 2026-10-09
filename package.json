@@ -1,0 +1,28 @@
+{
+  "name": "mikromanager",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MikroManager - Sistema Profesional de Gestión Hotspot y Control MikroTik RouterOS",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:api": "npm run dev --workspace=@mikromanager/api",
+    "dev:web": "npm run dev --workspace=@mikromanager/web",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "keywords": [
+    "mikrotik",
+    "routeros",
+    "hotspot",
+    "isp",
+    "wisp",
+    "vouchers",
+    "tickets"
+  ],
+  "author": "MikroManager Engineering Team",
+  "license": "UNLICENSED"
+}

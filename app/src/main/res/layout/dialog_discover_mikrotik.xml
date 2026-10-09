@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_background"
+    android:orientation="vertical"
+    android:padding="18dp">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Escáner Winbox Neighbors"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Detección automática por protocolo MNDP (UDP 5678)"
+                android:textColor="@color/cyan_accent"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnCloseDiscovery"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Cerrar"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="@color/text_secondary" />
+    </LinearLayout>
+
+    <!-- Scanning State Indicator -->
+    <LinearLayout
+        android:id="@+id/layoutScanningState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@color/surface_dark"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/cyan_accent" />
+
+        <TextView
+            android:id="@+id/tvScanProgressMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Buscando routers MikroTik en la red local..."
+            android:textColor="@color/text_primary"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Discovered Devices List -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="EQUIPOS DETECTADOS EN LA RED:"
+        android:textColor="@color/text_secondary"
+        android:textSize="11sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:maxHeight="220dp">
+
+        <LinearLayout
+            android:id="@+id/layoutDiscoveredList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvEmptyDiscovered"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/surface_dark"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="No se detectaron MikroTiks en esta red.\nAsegúrate de conectar el cable a los puertos LAN (ether2-5) o estar conectado al Wi-Fi del equipo."
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Quick Connect Form (Expands when a device is selected) -->
+    <LinearLayout
+        android:id="@+id/layoutQuickConnectForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@color/surface_dark"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvQuickConnectTargetTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Conectar a: MikroTik"
+            android:textColor="@color/cyan_accent"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <!-- Selector: Conectar por IP vs Conectar por MAC -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnConnectViaIp"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/cyan_accent"
+                android:text="Por IP"
+                android:textAllCaps="false"
+                android:textColor="@color/surface_dark"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:cornerRadius="6dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnConnectViaMac"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/card_dark"
+                android:text="Por MAC"
+                android:textAllCaps="false"
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:cornerRadius="6dp" />
+        </LinearLayout>
+
+        <!-- Router Name -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Nombre del Router:"
+            android:textColor="@color/text_secondary"
+            android:textSize="11sp" />
+
+        <EditText
+            android:id="@+id/etQuickRouterName"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/input_background"
+            android:paddingHorizontal="10dp"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <!-- Username and Password -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Usuario:"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="11sp" />
+
+                <EditText
+                    android:id="@+id/etQuickRouterUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/input_background"
+                    android:fontFamily="monospace"
+                    android:paddingHorizontal="10dp"
+                    android:text="admin"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contraseña:"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="11sp" />
+
+                <EditText
+                    android:id="@+id/etQuickRouterPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/input_background"
+                    android:fontFamily="monospace"
+                    android:hint="(Vacía de fábrica)"
+                    android:inputType="textPassword"
+                    android:paddingHorizontal="10dp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/text_secondary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Factory Default Note -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="#20F59E0B"
+            android:padding="6dp"
+            android:text="💡 MikroTik de fábrica: La contraseña viene completamente VACÍA. No escribas nada si es nuevo o reseteado."
+            android:textColor="#FBBF24"
+            android:textSize="10sp" />
+
+        <!-- Status Message -->
+        <TextView
+            android:id="@+id/tvQuickConnectFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="8dp"
+            android:textSize="11sp"
+            android:visibility="gone" />
+
+        <!-- Actions -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancelQuickConnect"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Cancelar"
+                android:textAllCaps="false"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSubmitQuickConnect"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/cyan_accent"
+                android:text="⚡ Probar y Conectar"
+                android:textAllCaps="false"
+                android:textColor="@color/surface_dark"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Bottom Actions -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRescanNetwork"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:text="🔍 Volver a Escanear"
+            android:textAllCaps="false"
+            android:textColor="@color/cyan_accent"
+            android:textSize="12sp"
+            app:cornerRadius="8dp"
+            app:strokeColor="@color/cyan_accent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnManualRouterAdd"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:layout_marginStart="8dp"
+            android:text="Agregar Manual (IP)"
+            android:textAllCaps="false"
+            android:textColor="@color/text_secondary"
+            android:textSize="11sp" />
+    </LinearLayout>
+</LinearLayout>
