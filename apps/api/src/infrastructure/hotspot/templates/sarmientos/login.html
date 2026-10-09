@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="expires" content="-1">
-    <title>Fichas Sarmientos • Acceso a Internet Wi-Fi</title>
+    <title>Fichas Sarmientos • Acceso a Internet</title>
     <style>
         :root {
-            --bg-color: #090D16;
-            --surface: #111827;
-            --surface-glass: rgba(17, 24, 39, 0.85);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --primary: #06B6D4;
-            --primary-glow: rgba(6, 182, 212, 0.25);
-            --accent: #10B981;
-            --text-primary: #F8FAFC;
-            --text-secondary: #94A3B8;
-            --text-muted: #64748B;
+            --bg-deep: #070B14;
+            --surface: rgba(15, 23, 42, 0.88);
+            --border: rgba(255, 255, 255, 0.09);
+            --primary-cyan: #06B6D4;
+            --primary-blue: #3B82F6;
+            --accent-green: #10B981;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --text-dim: #64748B;
             --danger: #EF4444;
+            --whatsapp: #25D366;
         }
 
         * {
@@ -30,236 +30,266 @@
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-deep);
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.15) 0%, transparent 60%),
-                radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
+                radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.18) 0%, transparent 55%),
+                radial-gradient(circle at 80% 90%, rgba(16, 185, 129, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 10% 70%, rgba(59, 130, 246, 0.12) 0%, transparent 45%);
             min-height: 100vh;
-            color: var(--text-primary);
+            color: var(--text-main);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 16px;
+            padding: 16px 12px;
         }
 
-        .container {
+        .card-container {
             width: 100%;
-            max-width: 390px;
-            background: var(--surface-glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 28px 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
-            animation: fadeIn 0.4s ease-out;
+            max-width: 410px;
+            background: var(--surface);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 26px;
+            padding: 26px 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            animation: slideUp 0.35s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Logo Futurista de Alta Velocidad (No WiFi aburrido) */
         .brand-header {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 22px;
         }
 
-        .wifi-icon-wrap {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 14px;
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(16, 185, 129, 0.15));
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            border-radius: 20px;
+        .speed-emblem {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 12px;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(16, 185, 129, 0.2));
+            border: 1.5px solid rgba(6, 182, 212, 0.45);
+            border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 24px var(--primary-glow);
-        }
-
-        .wifi-icon-wrap svg {
-            width: 32px;
-            height: 32px;
-            fill: none;
-            stroke: var(--primary);
-            stroke-width: 2.2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        h1 {
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            color: #FFFFFF;
-            margin-bottom: 4px;
-        }
-
-        .subtitle {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .badge-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            color: #34D399;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 9999px;
-            margin-top: 8px;
-        }
-
-        .badge-dot {
-            width: 6px;
-            height: 6px;
-            background-color: #34D399;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #34D399;
-        }
-
-        /* Error Banner */
-        .error-banner {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.25);
-            color: #F87171;
-            padding: 12px 14px;
-            border-radius: 12px;
-            font-size: 12px;
-            line-height: 1.4;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Auth Tabs */
-        .auth-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 4px;
-            border-radius: 14px;
-            border: 1px solid var(--border-color);
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 10px 6px;
-            text-align: center;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            border-radius: 10px;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-            transition: all 0.2s ease;
-        }
-
-        .auth-tab.active {
-            background: rgba(6, 182, 212, 0.2);
-            color: #38BDF8;
-            border: 1px solid rgba(6, 182, 212, 0.4);
-            box-shadow: 0 0 12px rgba(6, 182, 212, 0.2);
-        }
-
-        /* Form */
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .input-wrap {
+            box-shadow: 0 0 28px rgba(6, 182, 212, 0.35);
             position: relative;
         }
 
-        .input-pin {
-            width: 100%;
-            height: 52px;
-            background: #0B111E;
-            border: 1.5px solid var(--border-color);
-            border-radius: 14px;
-            padding: 0 16px;
-            font-size: 18px;
-            font-weight: 700;
-            font-family: "Courier New", Courier, monospace;
-            letter-spacing: 2px;
-            color: #FFFFFF;
-            text-align: center;
+        .speed-emblem svg {
+            width: 36px;
+            height: 36px;
+            fill: none;
+            stroke: url(#emblemGrad);
+            stroke-width: 2.3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(0 2px 8px rgba(6, 182, 212, 0.5));
+        }
+
+        .brand-title {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
             text-transform: uppercase;
+            background: linear-gradient(135deg, #FFFFFF 30%, #38BDF8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 3px;
+        }
+
+        .brand-tagline {
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.28);
+            color: #34D399;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            margin-top: 10px;
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            background-color: #34D399;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #34D399;
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        /* Alerta de error de RouterOS */
+        .error-alert {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: #F87171;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            line-height: 1.4;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-align: left;
+        }
+
+        /* Formulario de Inicio de Sesión */
+        .form-group {
+            margin-bottom: 14px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            width: 18px;
+            height: 18px;
+            stroke: var(--text-dim);
+            fill: none;
+            stroke-width: 2;
+            pointer-events: none;
+            transition: stroke 0.2s;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 50px;
+            background: #0B1220;
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 0 16px 0 44px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #FFFFFF;
+            font-family: "Courier New", Courier, monospace;
+            letter-spacing: 1px;
             transition: all 0.2s ease;
         }
 
-        .input-pin:focus {
+        .form-input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 16px var(--primary-glow);
+            border-color: var(--primary-cyan);
             background: #0F172A;
+            box-shadow: 0 0 16px rgba(6, 182, 212, 0.25);
         }
 
-        .input-pin::placeholder {
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            font-size: 14px;
+        .form-input:focus + .input-icon,
+        .input-box:focus-within .input-icon {
+            stroke: var(--primary-cyan);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-dim);
             font-family: inherit;
             font-weight: 500;
+            letter-spacing: 0;
+            font-size: 13px;
         }
 
-        .btn-submit {
+        /* Toggle de Modo Rápido (Solo PIN) */
+        .pin-toggle-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 4px 0 16px;
+            padding: 2px 4px;
+        }
+
+        .pin-toggle-btn {
+            background: none;
+            border: none;
+            color: #38BDF8;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 4px 0;
+        }
+
+        /* Botón de Conexión Principal */
+        .btn-connect {
             width: 100%;
-            height: 50px;
-            background: linear-gradient(135deg, #06B6D4, #0891B2);
-            color: #090D16;
+            height: 52px;
+            background: linear-gradient(135deg, #06B6D4, #0284C7);
+            color: #FFFFFF;
             border: none;
             border-radius: 14px;
             font-size: 15px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
+            font-weight: 900;
+            letter-spacing: 0.8px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             transition: all 0.2s ease;
-            box-shadow: 0 8px 20px rgba(6, 182, 212, 0.35);
+            box-shadow: 0 8px 24px rgba(6, 182, 212, 0.35);
+            text-transform: uppercase;
         }
 
-        .btn-submit:active {
+        .btn-connect:active {
             transform: scale(0.98);
             box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
         }
 
-        /* Pricing Card */
-        .pricing-section {
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
+        /* Tabla de Tarifas y Precios (Pequeños y completos) */
+        .pricing-box {
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
         }
 
-        .pricing-title {
+        .section-header {
             font-size: 11px;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.8px;
             color: var(--text-muted);
             text-align: center;
             margin-bottom: 12px;
-            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
         .plans-grid {
@@ -268,94 +298,127 @@
             gap: 8px;
         }
 
-        .plan-pill {
+        .plan-item {
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             border-radius: 12px;
             padding: 8px 4px;
             text-align: center;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, background 0.2s;
         }
 
-        .plan-pill:hover {
+        .plan-item:hover {
             border-color: rgba(6, 182, 212, 0.4);
+            background: rgba(6, 182, 212, 0.05);
         }
 
         .plan-duration {
             font-size: 11px;
             font-weight: 700;
-            color: var(--text-primary);
+            color: var(--text-main);
         }
 
-        .plan-cost {
-            font-size: 12px;
-            font-weight: 800;
+        .plan-price {
+            font-size: 13px;
+            font-weight: 900;
             color: #38BDF8;
             margin-top: 2px;
         }
 
-        /* WhatsApp Button */
-        .btn-whatsapp {
+        /* Acciones WhatsApp & Instalaciones */
+        .actions-box {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .btn-wa-action {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 9px;
             width: 100%;
             height: 44px;
-            background: rgba(37, 211, 102, 0.12);
-            border: 1px solid rgba(37, 211, 102, 0.25);
-            color: #25D366;
             border-radius: 12px;
             text-decoration: none;
-            font-size: 13px;
-            font-weight: 700;
-            margin-top: 14px;
-            transition: all 0.2s;
+            font-size: 12px;
+            font-weight: 800;
+            transition: all 0.2s ease;
         }
 
-        .btn-whatsapp:active {
+        .btn-buy-ticket {
+            background: rgba(37, 211, 102, 0.12);
+            border: 1px solid rgba(37, 211, 102, 0.35);
+            color: #25D366;
+        }
+
+        .btn-buy-ticket:active {
+            background: rgba(37, 211, 102, 0.25);
             transform: scale(0.98);
-            background: rgba(37, 211, 102, 0.2);
         }
 
-        .btn-whatsapp svg {
+        .btn-home-install {
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            color: #60A5FA;
+        }
+
+        .btn-home-install:active {
+            background: rgba(59, 130, 246, 0.25);
+            transform: scale(0.98);
+        }
+
+        .btn-wa-action svg {
             width: 18px;
             height: 18px;
+            flex-shrink: 0;
             fill: currentColor;
         }
 
-        /* Footer */
-        .footer {
-            margin-top: 20px;
+        /* Pie de página */
+        .footer-info {
+            margin-top: 18px;
             text-align: center;
-            font-size: 11px;
+            font-size: 10px;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        .footer-info strong {
             color: var(--text-muted);
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Logo & Header -->
+    <div class="card-container">
+        <!-- SVG Gradient Definition -->
+        <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+            <linearGradient id="emblemGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#06B6D4" />
+                <stop offset="100%" stop-color="#10B981" />
+            </linearGradient>
+        </svg>
+
+        <!-- Cabecera y Emblema de Alta Velocidad -->
         <div class="brand-header">
-            <div class="wifi-icon-wrap">
+            <div class="speed-emblem">
+                <!-- Icono Cohete / Rayo de Fibra Futurista -->
                 <svg viewBox="0 0 24 24">
-                    <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
-                    <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
-                    <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
-                    <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
                 </svg>
             </div>
-            <h1>Fichas Sarmientos</h1>
-            <p class="subtitle">Internet Wi-Fi de Alta Velocidad</p>
-            <div class="badge-status">
-                <span class="badge-dot"></span> Red Conectada y Segura
+            <h1 class="brand-title">Fichas Sarmientos</h1>
+            <p class="brand-tagline">Red Inalámbrica de Alta Velocidad</p>
+            <div class="status-badge">
+                <span class="pulse-dot"></span> Red Conectada • Listo para Navegar
             </div>
         </div>
 
-        <!-- MikroTik Error Message -->
+        <!-- Alerta de Error de RouterOS -->
         $(if error)
-        <div class="error-banner">
+        <div class="error-alert">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"></circle>
                 <line x1="12" y1="8" x2="12" y2="12"></line>
@@ -365,80 +428,76 @@
         </div>
         $(endif)
 
-        <!-- Selector de Modo: Usuario/Clave o Solo PIN -->
-        <div class="auth-tabs">
-            <button type="button" class="auth-tab active" id="tabUserPass" onclick="switchMode('userpass')">👤 Usuario y Clave</button>
-            <button type="button" class="auth-tab" id="tabPin" onclick="switchMode('pin')">🔑 Solo PIN</button>
-        </div>
-
-        <!-- Hotspot Login Form -->
-        <form name="login" action="$(link-login-only)" method="post" onsubmit="return syncLogin()">
+        <!-- Formulario Hotspot RouterOS -->
+        <form name="login" action="$(link-login-only)" method="post" onsubmit="return handleFormSubmit()">
             <input type="hidden" name="dst" value="$(link-orig)">
             <input type="hidden" name="popup" value="false">
 
-            <!-- Modo: Usuario y Contraseña (Campos separados) -->
-            <div id="modeUserPass">
-                <div class="form-group">
-                    <label for="rosUsernameInput">Usuario</label>
-                    <div class="input-wrap">
-                        <input 
-                            type="text" 
-                            id="rosUsernameInput" 
-                            name="username" 
-                            class="input-pin" 
-                            placeholder="Ej. 48291" 
-                            autocomplete="off" 
-                            autocorrect="off" 
-                            inputmode="numeric"
-                            pattern="[0-9]*"
-                            spellcheck="false"
-                            required
-                        >
-                    </div>
+            <!-- Campo: Usuario -->
+            <div class="form-group">
+                <div class="form-label">
+                    <span>Usuario</span>
+                    <span style="font-size: 10px; color: var(--text-dim);">Ficha</span>
                 </div>
-
-                <div class="form-group">
-                    <label for="rosPasswordInput">Contraseña</label>
-                    <div class="input-wrap">
-                        <input 
-                            type="password" 
-                            id="rosPasswordInput" 
-                            name="password" 
-                            class="input-pin" 
-                            placeholder="Ej. 71920" 
-                            autocomplete="off" 
-                            autocorrect="off" 
-                            inputmode="numeric"
-                            pattern="[0-9]*"
-                            spellcheck="false"
-                            required
-                        >
-                    </div>
+                <div class="input-box">
+                    <svg class="input-icon" viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <input 
+                        type="text" 
+                        id="usernameInput" 
+                        name="username" 
+                        class="form-input" 
+                        placeholder="Ingresa tu Usuario o PIN" 
+                        autocomplete="off" 
+                        autocorrect="off" 
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                        spellcheck="false"
+                        required
+                        autofocus
+                    >
                 </div>
             </div>
 
-            <!-- Modo: Solo PIN (1 solo campo) -->
-            <div id="modePin" style="display: none;">
-                <div class="form-group">
-                    <label for="rosSinglePinInput">PIN de Acceso</label>
-                    <div class="input-wrap">
-                        <input 
-                            type="text" 
-                            id="rosSinglePinInput" 
-                            class="input-pin" 
-                            placeholder="Ingresa tu PIN" 
-                            autocomplete="off" 
-                            autocorrect="off" 
-                            inputmode="numeric"
-                            pattern="[0-9]*"
-                            spellcheck="false"
-                        >
-                    </div>
+            <!-- Campo: Contraseña -->
+            <div class="form-group" id="passGroup">
+                <div class="form-label">
+                    <span>Contraseña</span>
+                    <span style="font-size: 10px; color: var(--text-dim);">Clave</span>
+                </div>
+                <div class="input-box">
+                    <svg class="input-icon" viewBox="0 0 24 24">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <input 
+                        type="password" 
+                        id="passwordInput" 
+                        name="password" 
+                        class="form-input" 
+                        placeholder="Ingresa tu Contraseña" 
+                        autocomplete="off" 
+                        autocorrect="off" 
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                        spellcheck="false"
+                        required
+                    >
                 </div>
             </div>
 
-            <button type="submit" class="btn-submit" id="btnConnect">
-                <span>CONECTAR AHORA</span>
+            <!-- Toggle Rápido: Tengo solo PIN -->
+            <div class="pin-toggle-bar">
+                <button type="button" class="pin-toggle-btn" id="btnTogglePin" onclick="togglePinMode()">
+                    🔑 ¿Tu ficha tiene solo PIN? Toca aquí
+                </button>
+            </div>
+
+            <!-- Botón de Conectar -->
+            <button type="submit" class="btn-connect" id="btnConnect">
+                <span>INICIAR SESIÓN</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
@@ -446,99 +505,114 @@
             </button>
         </form>
 
-        <!-- Pricing Grid -->
-        <div class="pricing-section">
-            <div class="pricing-title">Planes Disponibles</div>
+        <!-- Sección de Tarifas y Precios (6 Planes Completos) -->
+        <div class="pricing-box">
+            <div class="section-header">
+                ⚡ TARIFAS Y PLANES DISPONIBLES
+            </div>
             <div class="plans-grid">
-                <div class="plan-pill">
+                <div class="plan-item">
+                    <div class="plan-duration">1 Hora</div>
+                    <div class="plan-price">$5.00</div>
+                </div>
+                <div class="plan-item">
                     <div class="plan-duration">2 Horas</div>
-                    <div class="plan-cost">$10.00</div>
+                    <div class="plan-price">$10.00</div>
                 </div>
-                <div class="plan-pill">
+                <div class="plan-item">
                     <div class="plan-duration">5 Horas</div>
-                    <div class="plan-cost">$20.00</div>
+                    <div class="plan-price">$20.00</div>
                 </div>
-                <div class="plan-pill">
+                <div class="plan-item">
                     <div class="plan-duration">24 Horas</div>
-                    <div class="plan-cost">$35.00</div>
+                    <div class="plan-price">$35.00</div>
+                </div>
+                <div class="plan-item">
+                    <div class="plan-duration">1 Semana</div>
+                    <div class="plan-price">$100.00</div>
+                </div>
+                <div class="plan-item">
+                    <div class="plan-duration">1 Mes</div>
+                    <div class="plan-price">$350.00</div>
                 </div>
             </div>
+        </div>
 
-            <!-- WhatsApp Direct Assistance -->
-            <a href="https://wa.me/?text=Hola%2C%20quiero%20comprar%20una%20ficha%20de%20internet%20de%20Fichas%20Sarmientos" class="btn-whatsapp" target="_blank">
+        <!-- Acciones Directas WhatsApp: Comprar Ficha & Instalación en Casa -->
+        <div class="actions-box">
+            <!-- Comprar Ficha WhatsApp -->
+            <a href="https://wa.me/529541281816?text=Hola%20Fichas%20Sarmientos,%20quiero%20comprar%20una%20ficha%20de%20internet" class="btn-wa-action btn-buy-ticket" target="_blank">
                 <svg viewBox="0 0 24 24">
                     <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 17.03c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.16 8.16 0 0 1-1.25-4.26c0-4.52 3.68-8.2 8.21-8.2 2.19 0 4.25.85 5.8 2.4 1.55 1.55 2.41 3.61 2.41 5.8 0 4.52-3.68 8.2-8.21 8.2zm4.51-6.15c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.87.85-.87 2.07s.89 2.4 1.01 2.57c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.16-.48-.28z"/>
                 </svg>
-                ¿No tienes ficha? Pídela por WhatsApp
+                <span>Comprar Ficha por WhatsApp • 954 128 1816</span>
+            </a>
+
+            <!-- Instalaciones para Casa -->
+            <a href="https://wa.me/529541281816?text=Hola,%20me%20interesa%20una%20instalaci%C3%B3n%20de%20internet%20para%20casa" class="btn-wa-action btn-home-install" target="_blank">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>🏠 Instalaciones para Casa: 954 128 1816</span>
             </a>
         </div>
 
-        <div class="footer">
-            IP: $(ip) • MAC: $(mac)<br>
-            Powered by MikroManager v2.0
+        <!-- Pie de página -->
+        <div class="footer-info">
+            Atención a Clientes & Soporte: <strong>954 128 1816</strong><br>
+            IP: $(ip) • MAC: $(mac) • Fichas Sarmientos
         </div>
     </div>
 
     <script>
-        var currentMode = 'userpass';
+        var isPinOnlyMode = false;
 
-        function switchMode(mode) {
-            currentMode = mode;
-            var tabUP = document.getElementById('tabUserPass');
-            var tabP = document.getElementById('tabPin');
-            var modeUP = document.getElementById('modeUserPass');
-            var modeP = document.getElementById('modePin');
-            var userInput = document.getElementById('rosUsernameInput');
-            var passInput = document.getElementById('rosPasswordInput');
-            var pinInput = document.getElementById('rosSinglePinInput');
+        function togglePinMode() {
+            isPinOnlyMode = !isPinOnlyMode;
+            var passGroup = document.getElementById('passGroup');
+            var passwordInput = document.getElementById('passwordInput');
+            var usernameInput = document.getElementById('usernameInput');
+            var toggleBtn = document.getElementById('btnTogglePin');
 
-            if (mode === 'userpass') {
-                tabUP.className = 'auth-tab active';
-                tabP.className = 'auth-tab';
-                modeUP.style.display = 'block';
-                modeP.style.display = 'none';
-                userInput.required = true;
-                passInput.required = true;
-                pinInput.required = false;
-                userInput.focus();
+            if (isPinOnlyMode) {
+                passGroup.style.display = 'none';
+                passwordInput.required = false;
+                toggleBtn.innerText = '👤 ¿Tienes Usuario y Contraseña? Toca aquí';
+                usernameInput.placeholder = 'Ingresa tu PIN de 5 dígitos';
+                usernameInput.focus();
             } else {
-                tabUP.className = 'auth-tab';
-                tabP.className = 'auth-tab active';
-                modeUP.style.display = 'none';
-                modeP.style.display = 'block';
-                userInput.required = false;
-                passInput.required = false;
-                pinInput.required = true;
-                pinInput.focus();
+                passGroup.style.display = 'block';
+                passwordInput.required = true;
+                toggleBtn.innerText = '🔑 ¿Tu ficha tiene solo PIN? Toca aquí';
+                usernameInput.placeholder = 'Ingresa tu Usuario';
+                usernameInput.focus();
             }
         }
 
-        function syncLogin() {
+        function handleFormSubmit() {
             var btn = document.getElementById('btnConnect');
-            var userInput = document.getElementById('rosUsernameInput');
-            var passInput = document.getElementById('rosPasswordInput');
-            var pinInput = document.getElementById('rosSinglePinInput');
+            var usernameInput = document.getElementById('usernameInput');
+            var passwordInput = document.getElementById('passwordInput');
 
-            if (currentMode === 'pin') {
-                var pin = pinInput.value.trim();
-                if (!pin) return false;
-                userInput.value = pin;
-                passInput.value = pin;
+            var u = usernameInput.value.trim();
+            if (!u) return false;
+
+            if (isPinOnlyMode) {
+                // En modo solo PIN, la contraseña es igual al PIN
+                passwordInput.value = u;
             } else {
-                var u = userInput.value.trim();
-                var p = passInput.value.trim();
-                if (!u || !p) return false;
-                userInput.value = u;
-                passInput.value = p;
+                var p = passwordInput.value.trim();
+                if (!p) return false;
             }
 
             btn.innerHTML = '<span>CONECTANDO...</span>';
-            btn.style.opacity = '0.7';
+            btn.style.opacity = '0.75';
             btn.style.pointerEvents = 'none';
             return true;
         }
 
-        // Auto-login si la URL trae credenciales (ej. al escanear QR)
+        // Auto-login por QR o link con credenciales
         window.addEventListener('DOMContentLoaded', function() {
             var params = new URLSearchParams(window.location.search);
             var userFromUrl = params.get('username') || params.get('user');
@@ -546,16 +620,16 @@
             var pinFromUrl = params.get('pin');
 
             if (userFromUrl && passFromUrl) {
-                switchMode('userpass');
-                document.getElementById('rosUsernameInput').value = userFromUrl.trim();
-                document.getElementById('rosPasswordInput').value = passFromUrl.trim();
-                syncLogin();
+                document.getElementById('usernameInput').value = userFromUrl.trim();
+                document.getElementById('passwordInput').value = passFromUrl.trim();
+                handleFormSubmit();
                 document.forms['login'].submit();
             } else if (pinFromUrl || userFromUrl) {
-                var p = pinFromUrl || userFromUrl;
-                switchMode('pin');
-                document.getElementById('rosSinglePinInput').value = p.trim();
-                syncLogin();
+                var p = (pinFromUrl || userFromUrl).trim();
+                togglePinMode();
+                document.getElementById('usernameInput').value = p;
+                document.getElementById('passwordInput').value = p;
+                handleFormSubmit();
                 document.forms['login'].submit();
             }
         });
