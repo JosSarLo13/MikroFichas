@@ -27,25 +27,14 @@ export async function buildServer() {
 
   // 1. Plugins de Seguridad y Red
   await app.register(cors, {
-    origin: (origin, cb) => {
-      // Permitir solicitudes locales o sin cabecera origin (curl, apps móviles, etc.)
-      if (!origin || env.NODE_ENV === 'development') {
-        cb(null, true);
-        return;
-      }
-      const allowedOrigins = env.CORS_ORIGIN.split(',').map((o) => o.trim());
-      if (allowedOrigins.includes(origin)) {
-        cb(null, true);
-      } else {
-        cb(new Error('Bloqueado por política CORS de MikroManager'), false);
-      }
-    },
+    origin: true,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   });
 
   await app.register(helmet, {
-    contentSecurityPolicy: false, // Permitir websockets y assets en dev
+    contentSecurityPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
   });
 
   // 2. JWT Plugin para Autorización
