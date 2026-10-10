@@ -3,6 +3,10 @@ import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import jwt from '@fastify/jwt';
 import websocket from '@fastify/websocket';
+import fastifyStatic from '@fastify/static';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { env } from './config/env.js';
 import { healthRoutes } from './presentation/routes/health.routes.js';
 import { authRoutes } from './presentation/routes/auth.routes.js';
@@ -11,6 +15,9 @@ import { planRoutes } from './presentation/routes/plans.routes.js';
 import { ticketRoutes } from './presentation/routes/tickets.routes.js';
 import { saleRoutes } from './presentation/routes/sales.routes.js';
 import { hotspotRoutes } from './presentation/routes/hotspot.routes.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export async function buildServer() {
   const app = fastify({
@@ -68,16 +75,6 @@ export async function buildServer() {
   });
 
   // 5. Registro de Rutas API
-  app.get('/', async () => {
-    return {
-      service: 'MikroManager API Gateway',
-      version: '1.0.0',
-      description: 'Controlador de Redes Hotspot y MikroTik RouterOS',
-      documentation: '/docs',
-      health: '/api/v1/health',
-      timestamp: new Date().toISOString(),
-    };
-  });
   await app.register(healthRoutes, { prefix: '/api/v1' });
   await app.register(authRoutes, { prefix: '/api/v1' });
   await app.register(routerRoutes, { prefix: '/api/v1' });
@@ -85,6 +82,45 @@ export async function buildServer() {
   await app.register(ticketRoutes, { prefix: '/api/v1' });
   await app.register(saleRoutes, { prefix: '/api/v1' });
   await app.register(hotspotRoutes, { prefix: '/api/v1' });
+
+  // 6. Servir Frontend Web (React SPA) en la raíz
+  const possibleWebPaths = [
+    path.resolve(process.cwd(), 'apps/web/dist'),
+    path.resolve(__dirname, '../../web/dist'),
+    path.resolve(__dirname, '../../../web/dist'),
+  ];
+  const foundWebPath = possibleWebPaths.find((p) => fs.existsSync(path.join(p, 'index.html')));
+
+  if (foundWebPath) {
+    app.log.info(`🌐 Servidor sirviendo panel Web desde: ${foundWebPath}`);
+    await app.register(fastifyStatic, {
+      root: foundWebPath,
+      prefix: '/',
+      wildcard: false,
+    });
+
+    app.setNotFoundHandler((req, reply) => {
+      if (req.raw.url?.startsWith('/api/')) {
+        reply.status(404).send({
+          success: false,
+          error: { code: 'NOT_FOUND', message: 'Ruta API no encontrada' },
+        });
+      } else {
+        reply.sendFile('index.html');
+      }
+    });
+  } else {
+    app.get('/', async () => {
+      return {
+        service: 'MikroManager API Gateway',
+        version: '1.0.0',
+        description: 'Controlador de Redes Hotspot y MikroTik RouterOS',
+        documentation: '/docs',
+        health: '/api/v1/health',
+        timestamp: new Date().toISOString(),
+      };
+    });
+  }
 
   return app;
 }
