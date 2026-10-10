@@ -16,18 +16,16 @@
     "@fastify/websocket": "^11.0.2",
     "@mikromanager/shared-types": "*",
     "@prisma/client": "^6.4.1",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.13.5",
+    "@types/pdfkit": "^0.17.6",
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
     "fastify": "^5.2.1",
     "pdfkit": "^0.20.2",
-    "zod": "^3.24.2"
-  },
-  "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
-    "@types/node": "^22.13.5",
-    "@types/pdfkit": "^0.17.6",
     "prisma": "^6.4.1",
     "tsx": "^4.19.3",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "zod": "^3.24.2"
   }
 }
